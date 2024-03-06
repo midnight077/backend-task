@@ -1,0 +1,2 @@
+npx dotenvx precommit
+npx lint-staged
