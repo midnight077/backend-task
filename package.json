@@ -1,0 +1,30 @@
+{
+    "name": "backend-task",
+    "version": "1.0.0",
+    "description": "repo to showcase my backend skills",
+    "author": "Nishit Jain <nishitj077@gmail.com>",
+    "license": "MIT",
+    "keywords": [
+        "node",
+        "express",
+        "mysql",
+        "sequelize"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/midnight077/backend-task.git"
+    },
+    "homepage": "https://github.com/midnight077/backend-task#readme",
+    "bugs": {
+        "url": "https://github.com/midnight077/backend-task/issues"
+    },
+    "main": "src/index.js",
+    "type": "module",
+    "scripts": {
+        "start": "node ./src/index.js"
+    },
+    "dependencies": {
+        "dotenv": "^16.4.5",
+        "express": "^4.18.3"
+    }
+}
