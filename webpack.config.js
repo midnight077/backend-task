@@ -9,10 +9,13 @@ import nodeExternals from "webpack-node-externals";
  * @type {import("webpack").Configuration}
  */
 export default {
+    mode: "production",
+    devtool: "source-map",
     target: "node",
     externals: [nodeExternals()],
     entry: join(__dirname, "src", "index"),
     output: {
+        path: join(__dirname, "dist"),
         filename: "app.cjs",
         clean: true,
     },
