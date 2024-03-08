@@ -20,9 +20,7 @@ Product.init(
         },
         description: DataTypes.TEXT,
         vendor: DataTypes.STRING,
-        handle: {
-            type: DataTypes.STRING,
-        },
+        handle: DataTypes.STRING,
     },
     {
         sequelize: db,

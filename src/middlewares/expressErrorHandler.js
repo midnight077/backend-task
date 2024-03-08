@@ -1,12 +1,12 @@
-import { TokenExpiredError, JsonWebTokenError } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { BaseError, UniqueConstraintError, ValidationError } from "sequelize";
 
 import logger from "../winston.js";
 
 export function expressErrorHandler({ error, publicError }, req, res, next) {
-    if (error instanceof JsonWebTokenError) {
+    if (error instanceof jwt.JsonWebTokenError) {
         res.status(403);
-        if (error instanceof TokenExpiredError) {
+        if (error instanceof jwt.TokenExpiredError) {
             res.json({ error: "Token expired" });
         } else {
             res.json({ error: "Invalid token" });
