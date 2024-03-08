@@ -1,7 +1,7 @@
-import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 import { User } from "../models/index.js";
+
 import { generateAuthTokens } from "../helpers/token.js";
 
 export async function userRegister(req, res) {
@@ -53,31 +53,21 @@ export async function userLogin(req, res) {
 }
 
 export async function userLogout(req, res) {
-    const { refreshToken } = req.body;
-    if (!refreshToken) {
-        return res.status(400).json({ error: "Refresh token required" });
-    }
-
     try {
-        const decoded = jwt.verify(
-            refreshToken,
-            process.env.JWT_REFRESH_SECRET,
-        );
-        const user = await User.findOne({ where: { email: decoded.email } });
+        const { email } = req;
+        const user = await User.findOne({ where: { email } });
 
-        if (!user) {
+        if (
+            !user ||
+            !user.refreshToken ||
+            user.refreshToken !== req.body.refreshToken
+        ) {
             return res.status(404).json({ error: "User not found" });
         }
 
         await user.update({ refreshToken: null });
         res.json({ message: "Logged out successfully" });
     } catch (error) {
-        if (error instanceof jwt.TokenExpiredError) {
-            return res.status(403).json({ error: "Refresh token expired" });
-        } else if (error instanceof jwt.JsonWebTokenError) {
-            return res.status(403).json({ error: "Invalid refresh token" });
-        } else {
-            return res.status(500).json({ error: "Failed to logout" });
-        }
+        return res.status(500).json({ error: "Failed to logout" });
     }
 }

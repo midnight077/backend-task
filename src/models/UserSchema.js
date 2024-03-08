@@ -1,5 +1,8 @@
 import { DataTypes } from "sequelize";
 
+/**
+ * @type {import("sequelize").ModelAttributes}
+ */
 const UserSchema = {
     email: {
         type: DataTypes.STRING,
