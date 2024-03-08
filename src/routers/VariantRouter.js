@@ -1,6 +1,8 @@
 import { Router } from "express";
 const router = Router({ mergeParams: true });
 
+import { validateVariant } from "../middlewares/validateRequest.js";
+
 import {
     getAllVariants,
     createOneVariant,
@@ -11,8 +13,8 @@ import {
 
 router.get("/", getAllVariants);
 router.post("/", createOneVariant);
-router.get("/:id", getOneVariant);
-router.patch("/:id", updateOneVariant);
-router.delete("/:id", deleteOneVariant);
+router.get("/:variantHandle", validateVariant, getOneVariant);
+router.patch("/:variantHandle", validateVariant, updateOneVariant);
+router.delete("/:variantHandle", validateVariant, deleteOneVariant);
 
 export default router;

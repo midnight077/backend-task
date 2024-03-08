@@ -11,46 +11,35 @@ export async function getAllProducts(req, res, next) {
 }
 
 export async function createOneProduct(req, res, next) {
-    const { id, title, description, vendor } = req.body;
+    const { title, description, vendor } = req.body;
     if (!title) {
         return res.status(400).json({ error: "Title is required" });
     }
 
     try {
-        const newProduct = Product.build({ title, description, vendor });
-        if (id) newProduct.id = id;
-        await newProduct.save();
+        const product = await Product.create({ title, description, vendor });
 
-        res.status(201).json(newProduct);
+        res.status(201).json({ product });
     } catch (error) {
         next({ error, publicError: "Failed to create one product" });
     }
 }
 
 export async function getOneProduct(req, res, next) {
-    const handle = req.params.handle;
-    try {
-        const product = await Product.findOne({ where: { handle } });
-        if (!product) {
-            return res.status(404).json({ error: "Product not found" });
-        }
+    const { product } = req;
 
+    try {
         res.status(200).json({ product });
     } catch (error) {
-        next({ error, publicError: "Failed to get one product" });
+        next({ error, publicError: "Failed to send one product" });
     }
 }
 
 export async function updateOneProduct(req, res, next) {
-    const handle = req.params.handle;
+    const { product } = req;
     const { title, description, vendor } = req.body;
 
     try {
-        const product = await Product.findOne({ where: { handle } });
-        if (!product) {
-            return res.status(404).json({ error: "Product not found" });
-        }
-
         if (!title && !description && !vendor) {
             return res.status(400).json({ error: "Nothing to update" });
         }
@@ -66,20 +55,17 @@ export async function updateOneProduct(req, res, next) {
         }
         const updatedProduct = await product.save();
 
-        res.status(200).json(updatedProduct);
+        res.status(200).json({ product: updatedProduct });
     } catch (error) {
         next({ error, publicError: "Failed to update one product" });
     }
 }
 
 export async function deleteOneProduct(req, res, next) {
-    const handle = req.params.handle;
+    const { product } = req;
 
     try {
-        const isDeleted = Product.destroy({ where: { handle } });
-        if (!isDeleted) {
-            return res.status(404).json({ error: "Product not found" });
-        }
+        await product.destroy();
 
         res.status(204).json();
     } catch (error) {
