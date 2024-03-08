@@ -2,6 +2,7 @@ node_modules
 logs
 dist
 test.rest
+data_files
 
 .env*
 !.env.example
