@@ -6,10 +6,13 @@ import logger from "./winston.js";
 
 import ApiRouter from "./routers/index.js";
 
+import { expressErrorHandler } from "./middlewares/expressErrorHandler.js";
+
 const app = express();
 
 app.use(json());
 app.use("/api", ApiRouter);
+app.use(expressErrorHandler);
 
 try {
     await db.authenticate();

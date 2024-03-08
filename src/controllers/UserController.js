@@ -4,7 +4,7 @@ import { User } from "../models/index.js";
 
 import { generateAuthTokens } from "../helpers/token.js";
 
-export async function userRegister(req, res) {
+export async function userRegister(req, res, next) {
     const { email, password } = req.body;
     if (!email || !password) {
         return res.status(400).json({ error: "Login credentials required" });
@@ -22,11 +22,11 @@ export async function userRegister(req, res) {
 
         res.json({ accessToken, refreshToken });
     } catch (error) {
-        return res.status(500).json({ error: "Failed to register" });
+        next({ error, publicError: "Failed to register user" });
     }
 }
 
-export async function userLogin(req, res) {
+export async function userLogin(req, res, next) {
     const { email, password } = req.body;
     if (!email || !password) {
         return res.status(400).json({ error: "Login credentials required" });
@@ -48,11 +48,11 @@ export async function userLogin(req, res) {
         await user.update({ refreshToken });
         res.json({ accessToken, refreshToken });
     } catch (error) {
-        res.status(500).json({ error: "Failed to login" });
+        next({ error, publicError: "Failed to login user" });
     }
 }
 
-export async function userLogout(req, res) {
+export async function userLogout(req, res, next) {
     try {
         const { email } = req;
         const user = await User.findOne({ where: { email } });
@@ -68,6 +68,6 @@ export async function userLogout(req, res) {
         await user.update({ refreshToken: null });
         res.json({ message: "Logged out successfully" });
     } catch (error) {
-        return res.status(500).json({ error: "Failed to logout" });
+        next({ error, publicError: "Failed to logout user" });
     }
 }

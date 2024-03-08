@@ -15,15 +15,7 @@ export function verifyRefreshToken(req, res, next) {
         req.email = decoded.email;
         next();
     } catch (error) {
-        if (error instanceof jwt.TokenExpiredError) {
-            return res.status(403).json({ error: "Refresh token expired" });
-        } else if (error instanceof jwt.JsonWebTokenError) {
-            return res.status(403).json({ error: "Invalid refresh token" });
-        } else {
-            return res
-                .status(500)
-                .json({ error: "Failed to verify refresh token" });
-        }
+        next({ error, publicError: "Failed to verify refresh token" });
     }
 }
 
@@ -39,14 +31,6 @@ export function verifyAccessToken(req, res, next) {
         req.email = decoded.email;
         next();
     } catch (error) {
-        if (error instanceof jwt.TokenExpiredError) {
-            return res.status(403).json({ error: "Access token expired" });
-        } else if (error instanceof jwt.JsonWebTokenError) {
-            return res.status(403).json({ error: "Invalid access token" });
-        } else {
-            return res
-                .status(500)
-                .json({ error: "Failed to verify access token" });
-        }
+        next({ error, publicError: "Failed to verify access token" });
     }
 }
