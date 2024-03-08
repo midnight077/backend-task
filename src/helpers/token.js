@@ -9,3 +9,10 @@ export function generateAuthTokens(email) {
     });
     return { accessToken, refreshToken };
 }
+
+export function generateAccessToken(email) {
+    const accessToken = jwt.sign({ email }, process.env.JWT_ACCESS_SECRET, {
+        expiresIn: "15m",
+    });
+    return { accessToken };
+}
